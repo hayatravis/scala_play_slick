@@ -31,10 +31,10 @@ class CampaignsController @Inject()(val dbConfigProvider: DatabaseConfigProvider
 		}
 	}
 
-/*	import CampaignsController._
+	import CampaignsController._
 	def edit(id: Option[Long]) = Action.async { implicit rs =>
 		// リクエストパラメータにIDが存在するか確認
-		val form = if(id.isDefined) {
+		if(id.isDefined) {
 			db.run(Campaigns.filter(t => t.id === id.get.bind).result.head).map { campaign =>
 				// 値をフォームに詰める
 				campaignForm.fill(CampaignForm(Some(campaign.id), campaign.name, campaign.title, campaign.contents_text, campaign.destination_url,
@@ -44,8 +44,7 @@ class CampaignsController @Inject()(val dbConfigProvider: DatabaseConfigProvider
 			Future { campaignForm }
 		}
 
-//		Future { Ok(views.html.campaign.edit(form)) }
-		Future{ Ok(views.html.campaign.edit(form)) }
+		Future{ Ok(views.html.campaign.edit(campaignForm)) }
 		// .asyncを取って以下にするのもあり。
 		// TODO .asyncをよく読む https://www.playframework.com/documentation/2.4.3/ScalaAsync (https://www.playframework.com/documentation/ja/2.3.x/ScalaAsync)
 		// Ok(view.html.campaign.edit(form))
@@ -57,21 +56,18 @@ class CampaignsController @Inject()(val dbConfigProvider: DatabaseConfigProvider
 		campaignForm.bindFromRequest.fold(
 			// エラーの場合
 			error => {
-				db.run(Campaigns.sortBy(t => t.id).result).map { campaigns =>
-					BadRequest(views.html.campaign.edit(error, campaigns))
-				}
+				Future { BadRequest(views.html.campaign.edit(error)) }
 			},
 			// OKの場合
 			form => {
-				// ユーザを登録
-				val campaign = CampaignsRow(0, form.name, form.title, form.contents_text, campaign.destination_url,
-				form.created, form.modified, form,deleted, form.deleted_date)
+				// キャンペーンを登録
+				val campaign = CampaignsRow(0, form.name, form.title, form.contents_text, form.destination_url, form.created.get, form.modified.get, form.deleted.get, form.deleted_date.get)
 				db.run(Campaigns += campaign).map { _ =>
 					Redirect(routes.CampaignsController.list)
 				}
 			}
 		)
-	}*/
+	}
 }
 
 object CampaignsController {
