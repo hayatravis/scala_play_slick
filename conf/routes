@@ -7,3 +7,8 @@ GET     /                           controllers.Application.index
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+
+# Campaigns
+GET     /campaigns/list             controllers.CampaignsController.list()
+# GET     /campaigns/edit             controllers.CampaignsController.edit(id: Option[Long] ?= None)
+# GET     /campaigns/create           controllers.CampaignsController.create()
