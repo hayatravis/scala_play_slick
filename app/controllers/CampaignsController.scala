@@ -16,6 +16,7 @@ import models.Tables._
 
 import java.sql.Date
 
+import play.api.libs.json._
 
 /**
  * Created by hayato_sg on 15/10/19.
@@ -26,7 +27,6 @@ class CampaignsController @Inject()(val dbConfigProvider: DatabaseConfigProvider
 
 	def list = Action.async { implicit rs =>
 		db.run(Campaigns.sortBy(t => t.id).result).map { campaigns =>
-				println(campaigns)
 			Ok(views.html.campaign.list(campaigns))
 		}
 	}
@@ -34,21 +34,21 @@ class CampaignsController @Inject()(val dbConfigProvider: DatabaseConfigProvider
 	import CampaignsController._
 	def edit(id: Option[Long]) = Action.async { implicit rs =>
 		// リクエストパラメータにIDが存在するか確認
-		if(id.isDefined) {
+		val form = if(id.isDefined) {
 			db.run(Campaigns.filter(t => t.id === id.get.bind).result.head).map { campaign =>
+				val nowDate = new Date(System.currentTimeMillis()).getTime
 				// 値をフォームに詰める
 				campaignForm.fill(CampaignForm(Some(campaign.id), campaign.name, campaign.title, campaign.contents_text, campaign.destination_url,
-					Some(campaign.created), Some(campaign.modified), Some(campaign.deleted), Some(campaign.deleted_date)))
+					Some(nowDate), Some(nowDate), Some(campaign.deleted), Some(nowDate)))
 			}
+
 		} else {
 			Future { campaignForm }
 		}
 
-		Future{ Ok(views.html.campaign.edit(campaignForm)) }
-		// .asyncを取って以下にするのもあり。
-		// TODO .asyncをよく読む https://www.playframework.com/documentation/2.4.3/ScalaAsync (https://www.playframework.com/documentation/ja/2.3.x/ScalaAsync)
-		// Ok(view.html.campaign.edit(form))
-
+		form.flatMap { form =>
+			Future{ Ok(views.html.campaign.edit(form)) }
+		}
 	}
 
 	def create = Action.async { implicit rs =>
@@ -60,8 +60,27 @@ class CampaignsController @Inject()(val dbConfigProvider: DatabaseConfigProvider
 			},
 			// OKの場合
 			form => {
+//				val formatNow =  "%tY/%<tm/%<td %<tH:%<tM:%<tS" format new Date(System.currentTimeMillis())
+				val nowDate = new Date(System.currentTimeMillis())
 				// キャンペーンを登録
-				val campaign = CampaignsRow(0, form.name, form.title, form.contents_text, form.destination_url, form.created.get, form.modified.get, form.deleted.get, form.deleted_date.get)
+				val campaign = CampaignsRow(0, form.name, form.title, form.contents_text, form.destination_url, nowDate, nowDate, 0, nowDate)
+				db.run(Campaigns += campaign).map { _ =>
+					Redirect(routes.CampaignsController.list)
+				}
+			}
+		)
+	}
+
+	def update = Action.async { implicit rs =>
+		campaignForm.bindFromRequest.fold(
+			// エラー
+			error => {
+				Future { BadRequest(views.html.campaign.edit(error)) }
+			},
+			form => {
+//				val formatNow =  "%tY/%<tm/%<td %<tH:%<tM:%<tS" format new Date(System.currentTimeMillis())
+				val nowDate = new Date(System.currentTimeMillis())
+				val campaign = CampaignsRow(form.id.get, form.name, form.title, form.contents_text, form.destination_url, nowDate, nowDate, 0, nowDate)
 				db.run(Campaigns += campaign).map { _ =>
 					Redirect(routes.CampaignsController.list)
 				}
@@ -73,7 +92,7 @@ class CampaignsController @Inject()(val dbConfigProvider: DatabaseConfigProvider
 object CampaignsController {
 	// フォームの値を格納するケースクラス
 	case class CampaignForm(id: Option[Long], name: String, title: String, contents_text: String, destination_url: String,
-			                       created: Option[String], modified: Option[String], deleted: Option[Int], deleted_date: Option[String])
+			                       created: Option[Long], modified: Option[Long], deleted: Option[Int], deleted_date: Option[Long])
 
 	val campaignForm = Form(
 		mapping(
@@ -82,10 +101,10 @@ object CampaignsController {
 			"title"             -> nonEmptyText(maxLength = 30),
 			"contents_text"     -> nonEmptyText(maxLength = 100),
 			"destination_url"   -> nonEmptyText(maxLength = 100),
-			"created"           -> optional(text),
-			"modified"          -> optional(text),
+			"created"           -> optional(longNumber),
+			"modified"          -> optional(longNumber),
 			"deleted"           -> optional(number(min = 0, max = 1)),
-			"deleted_date"      -> optional(text)
+			"deleted_date"      -> optional(longNumber)
 		)(CampaignForm.apply)(CampaignForm.unapply)
 	)
 }

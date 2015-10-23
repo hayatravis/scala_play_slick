@@ -12,3 +12,7 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 GET     /campaigns/list             controllers.CampaignsController.list()
 GET     /campaigns/edit             controllers.CampaignsController.edit(id: Option[Long] ?= None)
 GET     /campaigns/create           controllers.CampaignsController.create()
+GET     /campaigns/update           controllers.CampaignsController.update()
+
+# API
+GET     /api/campaign               controllers.ApiController.campaign(id: Option[Long] ?= None)

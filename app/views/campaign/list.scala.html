@@ -4,16 +4,19 @@
 @* main.scala.htmlを呼ぶ *@
 @main("ユーザー一覧") {
 <div>
-	<a href="" class="btn btn-success" role="button">新規作成</a>
+	<a href="@routes.CampaignsController.edit()" class="btn btn-success" role="button">新規作成</a>
 </div>
 
-<div class="col-xs-6">
+<div class="col-xs-12">
 	<table class="table table-hover">
 		<thead>
 		<tr>
 			<th>ID</th>
 			<th>名前</th>
 			<th>タイトル</th>
+			<th>コンテンツ</th>
+			<th>計測URL</th>
+			<th>最終更新日</th>
 			<th>&nbsp;</th>
 		</tr>
 		</thead>
@@ -23,8 +26,12 @@
 		<tr>
 			<td>@campaign.id</td>
 			<td><a href="">@campaign.name</a></td>
-			<td><a href="">@campaign.title</a></td>
+			<td>@campaign.title</td>
+			<td>@campaign.contents_text</td>
+			<td>@campaign.destination_url</td>
+			<td>@campaign.modified</td>
 			<td>
+				<a href="@routes.CampaignsController.edit(Some(campaign.id))" class="btn btn-warning btn-xs" role="button">編集</a>
 				<input type="submit" value="削除" class="btn btn-danger btn-xs">
 				</td>
 		</tr>

@@ -1,2 +1,33 @@
 @* このテンプレートの引数 *@
 @(campaignForm: Form[controllers.CampaignsController.CampaignForm])(implicit messages: Messages)
+@import helper._
+@println(campaignForm("id"))
+
+
+@main("キャンペーン作成") {
+	@* IDがある場合は更新、ない場合は登録 *@
+	@helper.form(action = campaignForm("id").value.map(x => routes.CampaignsController.update).getOrElse(routes.CampaignsController.create), 'class -> "controller", 'role -> "form") {
+		<h1>キャンペーン @campaignForm("id").value.map(_ => "編集").getOrElse("登録")</h1>
+		<fieldset>
+			@* IDがある場合(更新)のみhiddenを出力する *@
+			@campaignForm("id").value.map { value =>
+			<input type="hidden" name="id", value="@value" />
+			}
+			<div class="form-group">
+				@inputText(campaignForm("name"), '_label -> "名前", '_showConstraints -> false)
+			</div>
+			<div class="form-group">
+				@inputText(campaignForm("title"), '_label -> "タイトル", '_showConstraints -> false)
+			</div>
+			<div class="form-group">
+				@inputText(campaignForm("contents_text"), '_label -> "コンテンツ", '_showConstraints -> false)
+			</div>
+			<div class="form-group">
+				@inputText(campaignForm("destination_url"), '_label -> "CV URL", '_showConstraints -> false)
+			</div>
+			<div class="form-group">
+				<input type="submit" value="保存" class="btn btn-success">
+			</div>
+		</fieldset>
+	}
+}
