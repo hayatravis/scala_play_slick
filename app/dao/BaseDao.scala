@@ -6,6 +6,7 @@ import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
 import slick.driver.JdbcProfile
 import slick.driver.H2Driver.api._
 import language.higherKinds
+import play.api.Play.current
 
 
 // private[package name]

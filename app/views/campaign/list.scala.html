@@ -1,5 +1,5 @@
 @* このテンプレートの引数 *@
-@(campaigns: Seq[models.Tables.CampaignsRow])
+@(campaigns: Seq[CampaignsRow])
 
 @* main.scala.htmlを呼ぶ *@
 @main("ユーザー一覧") {
@@ -16,7 +16,6 @@
 			<th>タイトル</th>
 			<th>コンテンツ</th>
 			<th>計測URL</th>
-			<th>最終更新日</th>
 			<th>&nbsp;</th>
 		</tr>
 		</thead>
@@ -29,9 +28,8 @@
 			<td>@campaign.title</td>
 			<td>@campaign.contents_text</td>
 			<td>@campaign.destination_url</td>
-			<td>@campaign.modified</td>
 			<td>
-				<a href="@routes.CampaignsController.edit(Some(campaign.id))" class="btn btn-warning btn-xs" role="button">編集</a>
+				<a href="@routes.CampaignsController.edit(campaign.id)" class="btn btn-warning btn-xs" role="button">編集</a>
 				<input type="submit" value="削除" class="btn btn-danger btn-xs">
 				</td>
 		</tr>

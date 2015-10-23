@@ -14,5 +14,5 @@ class CampaignsTable(tag: Tag) extends BaseTable[CampaignsRow] (tag, "CAMPAIGNS"
 }
 
 object CampaignsDAO extends BaseDao[CampaignsTable, CampaignsRow] {
-	var tableQuery = TableQuery[CampaignsTable]
+	val tableQuery = TableQuery[CampaignsTable]
 }

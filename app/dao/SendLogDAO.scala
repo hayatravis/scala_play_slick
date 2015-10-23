@@ -12,5 +12,5 @@ class SendLogTable(tag: Tag) extends BaseTable[SendLogRow] (tag, "SENDLOG") {
 }
 
 object SendLogDAO extends BaseDao[SendLogTable, SendLogRow] {
-	var tableQuery = TableQuery[SendLogTable]
+	val tableQuery = TableQuery[SendLogTable]
 }
