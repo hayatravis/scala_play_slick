@@ -10,7 +10,7 @@ class CampaignsTable(tag: Tag) extends BaseTable[CampaignsRow] (tag, "CAMPAIGNS"
 	def contents_text = column[String]("CONTENTS_TEXT")
 	def destination_url = column[String]("DESTINATION_URL")
 
-	def * = (id.?, name, title, contents_text, destination_url) <> (CampaignsRow.tupled, CampaignsRow.unapply)
+	def * = (id.?, name, title, contents_text, destination_url, created.?, modified.?, deleted.?, deleted_date.?) <> (CampaignsRow.tupled, CampaignsRow.unapply)
 }
 
 object CampaignsDAO extends BaseDao[CampaignsTable, CampaignsRow] {

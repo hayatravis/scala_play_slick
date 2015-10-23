@@ -5,6 +5,10 @@
 
 
 @main("キャンペーン作成") {
+<div>
+	<a href="@routes.CampaignsController.list()" class="btn btn-info" role="button">キャンペーン一覧</a>
+</div>
+
 	@* IDがある場合は更新、ない場合は登録 *@
 	@helper.form(action = campaignForm("id").value.map(x => routes.CampaignsController.update).getOrElse(routes.CampaignsController.create), 'class -> "controller", 'role -> "form") {
 		<h1>キャンペーン @campaignForm("id").value.map(_ => "編集").getOrElse("登録")</h1>

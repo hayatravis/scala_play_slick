@@ -1,5 +1,7 @@
 package controllers
 
+import java.sql.Date
+
 import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
@@ -47,8 +49,9 @@ class CampaignsController @Inject() (val messagesApi: MessagesApi)  extends Cont
 			},
 			// OKの場合
 			form => {
+				val nowDate = new Date(System.currentTimeMillis())
 				// キャンペーンを登録
-				val campaignsRow = CampaignsRow(Some(0), form.name, form.title, form.contents_text, form.destination_url)
+				val campaignsRow = CampaignsRow(Some(0), form.name, form.title, form.contents_text, form.destination_url, Some(nowDate), Some(nowDate), Some(0), Some(nowDate))
 				CampaignsDAO.insert(campaignsRow).map { _ =>
 					Redirect(routes.CampaignsController.list)
 				}
@@ -63,7 +66,8 @@ class CampaignsController @Inject() (val messagesApi: MessagesApi)  extends Cont
 				Future { BadRequest(views.html.campaign.edit(error)) }
 			},
 			form => {
-				val campaign = CampaignsRow(form.id, form.name, form.title, form.contents_text, form.destination_url)
+				val nowDate = new Date(System.currentTimeMillis())
+				val campaign = CampaignsRow(form.id, form.name, form.title, form.contents_text, form.destination_url, Some(nowDate), Some(nowDate), Some(0), Some(nowDate))
 				CampaignsDAO.update(campaign, form.id.get).map { _ =>
 					Redirect(routes.CampaignsController.list)
 				}
