@@ -3,13 +3,15 @@ package controllers
 import java.sql.Date
 import play.api.db.slick.{HasDatabaseConfigProvider, DatabaseConfigProvider}
 import play.api.mvc._
-import models.Tables._
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.libs.concurrent.Execution.Implicits._
 
 import models.CampaignsRow
+import models.SendLogRow
 import dao.CampaignsDAO
+import dao.SendLogDAO
+
 
 
 object ApiController {
@@ -34,6 +36,11 @@ class ApiController extends Controller {
 	import ApiController._
 	def campaign(id: Option[Long]) = Action.async { implicit rs =>
 		if (id.isDefined) {
+			// ログの挿入
+			println(rs.remoteAddress) // IP
+			println(rs.headers.get("User-Agent")) // UA
+			// TODO SendLogDAO.insert()
+
 			CampaignsDAO.findById(id.get).map { campaign =>
 				Ok(Json.obj("campaigns" -> campaign))
 			}
