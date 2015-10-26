@@ -18,3 +18,6 @@ GET     /campaigns/update           controllers.CampaignsController.update()
 
 # API
 GET     /api/campaign               controllers.ApiController.campaign(id: Option[Long] ?= None)
+
+# Report
+GET     /report/daily_report        controllers.ReportController.daily_report(id: Option[Long] ?= None)

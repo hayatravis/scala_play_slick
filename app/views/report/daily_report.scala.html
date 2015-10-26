@@ -1,0 +1,30 @@
+@* このテンプレートの引数 *@
+
+@(logs: Seq[(java.sql.Date, Int)])
+
+@* main.scala.htmlを呼ぶ *@
+@main("配信ログ") {
+<div>
+	<a href="@routes.CampaignsController.log_list()" class="btn btn-success" role="button">全体ログ</a>
+</div>
+
+<div class="col-xs-12">
+	<table class="table table-hover">
+		<thead>
+		<tr>
+			<th>日時</th>
+			<th>配信数</th>
+		</tr>
+		</thead>
+		<tbody>
+		@* ユーザ一覧をループ *@
+		@logs.map { log =>
+		<tr>
+			<td>@log._1</td>
+			<td>@log._2</td>
+		</tr>
+		}
+		</tbody>
+	</table>
+</div>
+}

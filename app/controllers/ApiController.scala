@@ -10,7 +10,7 @@ import models.CampaignsRow
 import models.SendLogRow
 import dao.CampaignsDAO
 import dao.SendLogDAO
-import java.sql.Timestamp
+import java.sql.{Date, Timestamp}
 
 
 object ApiController {
@@ -36,9 +36,9 @@ class ApiController extends Controller {
 	def campaign(id: Option[Long]) = Action.async { implicit rs =>
 		if (id.isDefined) {
 			// ログの挿入
-//			val nowDate = new Date(System.currentTimeMillis())
+			val nowDate = new Date(System.currentTimeMillis())
 			val nowTimestamp = new Timestamp(System.currentTimeMillis())
-			val Log = SendLogRow(Some(0), id.get, rs.remoteAddress, rs.headers.get("User-Agent").get, Some(nowTimestamp), Some(0))
+			val Log = SendLogRow(Some(0), id.get, rs.remoteAddress, rs.headers.get("User-Agent").get, nowDate, Some(nowTimestamp), Some(0))
 			println(SendLogDAO.insert(Log))
 
 			CampaignsDAO.findById(id.get).map { campaign =>

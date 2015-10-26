@@ -7,6 +7,7 @@ CREATE TABLE `SendLog` (
 	`campaign_id` int(10) unsigned NOT NULL,
 	`ip` varchar(255) NOT NULL,
 	`ua` varchar(255) NOT NULL,
+	`send_date` date NOT NULL,
 	`created` datetime NOT NULL,
 	`deleted` tinyint(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY (`id`)

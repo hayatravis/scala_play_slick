@@ -3,7 +3,7 @@
 @(send_logs: Seq[(models.SendLogRow, String)])
 
 @* main.scala.htmlを呼ぶ *@
-@main("ユーザー一覧") {
+@main("配信ログ") {
 <div>
 	<a href="@routes.CampaignsController.list()" class="btn btn-success" role="button">キャンペーン一覧</a>
 </div>

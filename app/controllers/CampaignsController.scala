@@ -22,6 +22,7 @@ class CampaignsController @Inject() (val messagesApi: MessagesApi)  extends Cont
 		}
 	}
 
+	// TODO ReportControllerへ移動する
 	def log_list = Action.async { implicit rs =>
 		SendLogDAO.getAllLogWithCampaignName.map { send_logs =>
 			Ok(views.html.campaign.log_list(send_logs))
