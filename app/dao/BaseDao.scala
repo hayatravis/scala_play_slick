@@ -1,22 +1,21 @@
 package dao
 
-import java.sql.Date
 import scala.concurrent.Future
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
 import slick.driver.JdbcProfile
 import slick.driver.H2Driver.api._
 import language.higherKinds
 import play.api.Play.current
-
+import java.sql.Timestamp
 
 // private[package name]
 // about Tag http://stackoverflow.com/questions/31849946/scala-slick-table-tag
 private[dao] abstract class BaseTable[CaseClassType](tableTag: Tag, tableName: String) extends Table[CaseClassType](tableTag, tableName) {
 	def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
-	def created = column[Date]("CREATED")
-	def modified = column[Date]("MODIFIED")
+	def created = column[Timestamp]("CREATED")
+	def modified = column[Timestamp]("MODIFIED")
 	def deleted = column[Int]("DELETED")
-	def deleted_date = column[Date]("DELETED_DATE")
+	def deleted_date = column[Timestamp]("DELETED_DATE")
 }
 
 // about <: : 上限境界(>: は下限境界)

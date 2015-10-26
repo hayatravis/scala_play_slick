@@ -1,10 +1,8 @@
 package dao
 
 import slick.driver.H2Driver.api._
-
 import models.CampaignsRow
 
-import scala.concurrent.Future
 
 class CampaignsTable(tag: Tag) extends BaseTable[CampaignsRow] (tag, "CAMPAIGNS") {
 	def name = column[String]("NAME")

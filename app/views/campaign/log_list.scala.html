@@ -1,6 +1,7 @@
 @* このテンプレートの引数 *@
 
 @(send_logs: Seq[(models.SendLogRow, String)])
+
 @* main.scala.htmlを呼ぶ *@
 @main("ユーザー一覧") {
 <div>
@@ -25,6 +26,7 @@
 	<table class="table table-hover">
 		<thead>
 		<tr>
+			<th>日時</th>
 			<th>ID</th>
 			<th>キャンペーン</th>
 			<th>IP</th>
@@ -35,6 +37,7 @@
 		@* ユーザ一覧をループ *@
 		@send_logs.map { send_log =>
 		<tr>
+			<td>@send_log._1.created</td>
 			<td>@send_log._1.id</td>
 			<td><a href="@routes.CampaignsController.edit(Some(send_log._1.campaign_id))">@send_log._2</a></td>
 			<td>@send_log._1.ip</td>
