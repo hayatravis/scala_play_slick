@@ -13,6 +13,7 @@ import dao.SendLogDAO
 import java.sql.{Date, Timestamp}
 
 
+
 object ApiController {
 	implicit val campaignsRowWrites = (
 			(__ \ "id"                  ).write[Option[Long]]       and

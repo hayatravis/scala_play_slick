@@ -4,6 +4,7 @@ import slick.driver.H2Driver.api._
 import models.SendLogRow
 import java.sql.Date
 
+
 class SendLogTable(tag: Tag) extends BaseTable[SendLogRow] (tag, "SENDLOG") {
 	def campaign_id = column[Long]("CAMPAIGN_ID")
 	def ip = column[String]("IP")
