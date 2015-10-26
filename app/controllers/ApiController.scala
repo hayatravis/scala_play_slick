@@ -12,6 +12,7 @@ import models.SendLogRow
 import dao.CampaignsDAO
 import dao.SendLogDAO
 
+import scala.collection.mutable.ListBuffer
 
 
 object ApiController {
@@ -37,9 +38,9 @@ class ApiController extends Controller {
 	def campaign(id: Option[Long]) = Action.async { implicit rs =>
 		if (id.isDefined) {
 			// ログの挿入
-			println(rs.remoteAddress) // IP
-			println(rs.headers.get("User-Agent")) // UA
-			// TODO SendLogDAO.insert()
+			val nowDate = new Date(System.currentTimeMillis())
+			val Log = SendLogRow(Some(0), id.get, rs.remoteAddress, rs.headers.get("User-Agent").get, Some(nowDate), Some(0))
+			println(SendLogDAO.insert(Log))
 
 			CampaignsDAO.findById(id.get).map { campaign =>
 				Ok(Json.obj("campaigns" -> campaign))

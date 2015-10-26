@@ -9,7 +9,7 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import javax.inject.Inject
 import scala.concurrent.Future
 import models.CampaignsRow
-import dao.CampaignsDAO
+import dao.{SendLogDAO, CampaignsDAO}
 import play.api.i18n.{MessagesApi, I18nSupport}
 
 
@@ -21,6 +21,22 @@ class CampaignsController @Inject() (val messagesApi: MessagesApi)  extends Cont
 	def list = Action.async { implicit rs =>
 		CampaignsDAO.getAll.map { campaigns =>
 			Ok(views.html.campaign.list(campaigns))
+		}
+	}
+
+	def log_list = Action.async { implicit rs =>
+		SendLogDAO.getAllLogWithCampaignName.map { send_logs =>
+			Ok(views.html.campaign.log_list(send_logs))
+		}
+	}
+
+	def log(id: Option[Long]) = Action.async { implicit rs =>
+		if (id.isDefined) {
+			SendLogDAO.getLogByCampaignIdWithCampaignName(id.get).map { send_logs =>
+				Ok(views.html.campaign.log_list(send_logs))
+			}
+		} else {
+			Future { Redirect(routes.CampaignsController.list()) }
 		}
 	}
 

@@ -1,0 +1,47 @@
+@* このテンプレートの引数 *@
+
+@(send_logs: Seq[(models.SendLogRow, String)])
+@* main.scala.htmlを呼ぶ *@
+@main("ユーザー一覧") {
+<div>
+	<a href="@routes.CampaignsController.list()" class="btn btn-success" role="button">キャンペーン一覧</a>
+</div>
+<div class="col-xs-3">
+<table class="table table-bordered" style="margin-top: 10px;">
+	<thead>
+		<tr>
+			<th>合計配信数</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>@send_logs.length</td>
+		</tr>
+	</tbody>
+</table>
+</div>
+
+<div class="col-xs-12">
+	<table class="table table-hover">
+		<thead>
+		<tr>
+			<th>ID</th>
+			<th>キャンペーン</th>
+			<th>IP</th>
+			<th>UA</th>
+		</tr>
+		</thead>
+		<tbody>
+		@* ユーザ一覧をループ *@
+		@send_logs.map { send_log =>
+		<tr>
+			<td>@send_log._1.id</td>
+			<td><a href="@routes.CampaignsController.edit(Some(send_log._1.campaign_id))">@send_log._2</a></td>
+			<td>@send_log._1.ip</td>
+			<td>@send_log._1.ua</td>
+		</tr>
+		}
+		</tbody>
+	</table>
+</div>
+}
