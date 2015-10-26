@@ -1,6 +1,6 @@
 package controllers
 
-import java.sql.Date
+import java.sql.{Timestamp, Date}
 
 import play.api.mvc._
 import play.api.data._
@@ -11,7 +11,6 @@ import scala.concurrent.Future
 import models.CampaignsRow
 import dao.{SendLogDAO, CampaignsDAO}
 import play.api.i18n.{MessagesApi, I18nSupport}
-
 
 /**
  * Created by hayato_sg on 15/10/19.
@@ -66,8 +65,9 @@ class CampaignsController @Inject() (val messagesApi: MessagesApi)  extends Cont
 			// OKの場合
 			form => {
 				val nowDate = new Date(System.currentTimeMillis())
+				val nowTimestamp = new Timestamp(System.currentTimeMillis())
 				// キャンペーンを登録
-				val campaignsRow = CampaignsRow(Some(0), form.name, form.title, form.contents_text, form.destination_url, Some(nowDate), Some(nowDate), Some(0), Some(nowDate))
+				val campaignsRow = CampaignsRow(Some(0), form.name, form.title, form.contents_text, form.destination_url, Some(nowTimestamp), Some(nowTimestamp), Some(0), Some(nowTimestamp))
 				CampaignsDAO.insert(campaignsRow).map { _ =>
 					Redirect(routes.CampaignsController.list)
 				}
@@ -83,7 +83,8 @@ class CampaignsController @Inject() (val messagesApi: MessagesApi)  extends Cont
 			},
 			form => {
 				val nowDate = new Date(System.currentTimeMillis())
-				val campaign = CampaignsRow(form.id, form.name, form.title, form.contents_text, form.destination_url, Some(nowDate), Some(nowDate), Some(0), Some(nowDate))
+				val nowTimestamp = new Timestamp(System.currentTimeMillis())
+				val campaign = CampaignsRow(form.id, form.name, form.title, form.contents_text, form.destination_url, Some(nowTimestamp), Some(nowTimestamp), Some(0), Some(nowTimestamp))
 				CampaignsDAO.update(campaign, form.id.get).map { _ =>
 					Redirect(routes.CampaignsController.list)
 				}

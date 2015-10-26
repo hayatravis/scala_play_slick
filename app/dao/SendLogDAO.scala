@@ -2,8 +2,6 @@ package dao
 
 import slick.driver.H2Driver.api._
 import models.SendLogRow
-import models.CampaignsRow
-import scala.concurrent.Future
 
 class SendLogTable(tag: Tag) extends BaseTable[SendLogRow] (tag, "SENDLOG") {
 	def campaign_id = column[Long]("CAMPAIGN_ID")
