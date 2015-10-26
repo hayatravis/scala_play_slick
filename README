@@ -1,4 +1,8 @@
-This is your new Play application
+This is Play Sample Ad Application
 =================================
 
-This file will be packaged with your application, when using `activator dist`.
+### Functions
+- Campaigns CURD
+- Campaign JSON API
+- API Access Log (deliver log)
+- Campaign Log Report
